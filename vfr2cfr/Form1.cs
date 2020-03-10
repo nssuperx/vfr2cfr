@@ -16,5 +16,18 @@ namespace vfr2cfr
         {
             InitializeComponent();
         }
+
+        private void TestButton_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = openFileDialog.ShowDialog();
+            if (dr == System.Windows.Forms.DialogResult.OK)
+            {
+                openFiles.Items.Clear();
+                foreach(string strFilePath in openFileDialog.FileNames)
+                {
+                    openFiles.Items.Add(strFilePath);
+                }
+            }
+        }
     }
 }
