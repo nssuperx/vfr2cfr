@@ -18,6 +18,5 @@ namespace vfr2cfr
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
         }
-        // git使えてるか確認
     }
 }
