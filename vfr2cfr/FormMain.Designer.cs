@@ -1,6 +1,6 @@
 ﻿namespace vfr2cfr
 {
-    partial class Form1
+    partial class FormMain
     {
         /// <summary>
         /// 必要なデザイナー変数です。
@@ -67,7 +67,7 @@
             this.openFiles.Size = new System.Drawing.Size(212, 112);
             this.openFiles.TabIndex = 2;
             // 
-            // Form1
+            // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -75,8 +75,8 @@
             this.Controls.Add(this.openFiles);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.testButton);
-            this.Name = "Form1";
-            this.Text = "Form1";
+            this.Name = "FormMain";
+            this.Text = "vfr2cfr";
             this.ResumeLayout(false);
 
         }
