@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
             this.testButton = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.outButton = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.openFiles = new System.Windows.Forms.ListBox();
+            this.openFilesList = new System.Windows.Forms.ListBox();
             this.SuspendLayout();
             // 
             // testButton
             // 
-            this.testButton.Location = new System.Drawing.Point(65, 218);
+            this.testButton.Location = new System.Drawing.Point(98, 156);
             this.testButton.Name = "testButton";
             this.testButton.Size = new System.Drawing.Size(75, 23);
             this.testButton.TabIndex = 0;
@@ -44,37 +44,42 @@
             this.testButton.UseVisualStyleBackColor = true;
             this.testButton.Click += new System.EventHandler(this.TestButton_Click);
             // 
-            // button2
+            // outButton
             // 
-            this.button2.Location = new System.Drawing.Point(202, 218);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "button2";
-            this.button2.UseVisualStyleBackColor = true;
+            this.outButton.Location = new System.Drawing.Point(386, 156);
+            this.outButton.Name = "outButton";
+            this.outButton.Size = new System.Drawing.Size(75, 23);
+            this.outButton.TabIndex = 1;
+            this.outButton.Text = "convert";
+            this.outButton.UseVisualStyleBackColor = true;
+            this.outButton.Click += new System.EventHandler(this.OutButton_Click);
             // 
             // openFileDialog
             // 
-            this.openFileDialog.FileName = "openFileDialog";
+            this.openFileDialog.Filter = "Video Files|*.mp4;*.avi|All Files|*.*";
             this.openFileDialog.Multiselect = true;
             // 
-            // openFiles
+            // openFilesList
             // 
-            this.openFiles.FormattingEnabled = true;
-            this.openFiles.ItemHeight = 12;
-            this.openFiles.Location = new System.Drawing.Point(65, 29);
-            this.openFiles.Name = "openFiles";
-            this.openFiles.Size = new System.Drawing.Size(212, 112);
-            this.openFiles.TabIndex = 2;
+            this.openFilesList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.openFilesList.FormattingEnabled = true;
+            this.openFilesList.HorizontalScrollbar = true;
+            this.openFilesList.ItemHeight = 12;
+            this.openFilesList.Location = new System.Drawing.Point(12, 17);
+            this.openFilesList.Name = "openFilesList";
+            this.openFilesList.Size = new System.Drawing.Size(560, 100);
+            this.openFilesList.TabIndex = 2;
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(338, 288);
-            this.Controls.Add(this.openFiles);
-            this.Controls.Add(this.button2);
+            this.ClientSize = new System.Drawing.Size(584, 191);
+            this.Controls.Add(this.openFilesList);
+            this.Controls.Add(this.outButton);
             this.Controls.Add(this.testButton);
+            this.MinimumSize = new System.Drawing.Size(300, 0);
             this.Name = "FormMain";
             this.Text = "vfr2cfr";
             this.ResumeLayout(false);
@@ -84,9 +89,9 @@
         #endregion
 
         private System.Windows.Forms.Button testButton;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button outButton;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
-        private System.Windows.Forms.ListBox openFiles;
+        private System.Windows.Forms.ListBox openFilesList;
     }
 }
 
