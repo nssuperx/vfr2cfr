@@ -62,11 +62,14 @@ namespace vfr2cfr
                 }
                 f = Path.ChangeExtension(f, "avi");
 
+                //Console.WriteLine("Input file: " + Path.GetFileName(outFilePath));
+                textBox.AppendText("Input file: " + Path.GetFileName(outFilePath) + Environment.NewLine);
                 p.StartInfo.Arguments = @"/c ffmpeg -i " + "\"" + outFilePath + "\"" + " -r 60 -vsync cfr -af aresample=async=1 -vcodec utvideo -acodec pcm_s16le " + "\"" + f + "\"";
                 p.Start();
                 p.WaitForExit();
                 p.Close();
-                Console.WriteLine("output file: " + Path.GetFileName(f));
+                //Console.WriteLine("Done. output file: " + Path.GetFileName(f));
+                textBox.AppendText("Done. output file: " + Path.GetFileName(f) + Environment.NewLine);
             }
         }
     }
