@@ -46,6 +46,7 @@
             // 
             // outButton
             // 
+            this.outButton.Enabled = false;
             this.outButton.Location = new System.Drawing.Point(386, 156);
             this.outButton.Name = "outButton";
             this.outButton.Size = new System.Drawing.Size(75, 23);
@@ -79,7 +80,7 @@
             this.Controls.Add(this.openFilesList);
             this.Controls.Add(this.outButton);
             this.Controls.Add(this.testButton);
-            this.MinimumSize = new System.Drawing.Size(300, 0);
+            this.MinimumSize = new System.Drawing.Size(300, 39);
             this.Name = "FormMain";
             this.Text = "vfr2cfr";
             this.ResumeLayout(false);
