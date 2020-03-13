@@ -22,7 +22,7 @@ namespace vfr2cfr
         private void TestButton_Click(object sender, EventArgs e)
         {
             DialogResult dr = openFileDialog.ShowDialog();
-            if (dr == System.Windows.Forms.DialogResult.OK)
+            if (dr == DialogResult.OK)
             {
                 openFilesList.Items.Clear();
                 outFilePaths = openFileDialog.FileNames;
@@ -54,15 +54,20 @@ namespace vfr2cfr
             p.StartInfo.RedirectStandardInput = true;
 
             //非同期で出力を読み取れるようにする
-            p.StartInfo.RedirectStandardOutput = true;
-            p.OutputDataReceived += p_OutputDataReceived;
+            //p.StartInfo.RedirectStandardOutput = true;
+            //p.OutputDataReceived += p_OutputDataReceived;
+
+
+            p.StartInfo.Arguments = @"/c ffmpeg -h";
 
             //起動
             p.Start();
 
             //非同期で出力の読み取りを開始
-            p.BeginOutputReadLine();
-
+            //p.BeginOutputReadLine();
+            //出力を読み取る
+            string results = p.StandardOutput.ReadToEnd();
+            /*
             //入力のストリームを取得
             System.IO.StreamWriter sw = p.StandardInput;
             if (sw.BaseStream.CanWrite)
@@ -75,27 +80,54 @@ namespace vfr2cfr
                         f = Path.Combine(Path.GetDirectoryName(f), Path.GetFileNameWithoutExtension(f) + "-out");
                     }
                     f = Path.ChangeExtension(f, "avi");
-                
-                    sw.WriteLine(@"ffmpeg -i " + "\"" + outFilePath + "\"" + " -r 60 -vsync cfr -af aresample=async=1 -vcodec utvideo -acodec pcm_s16le " + "\"" + f + "\"");
 
-                    //出力を読み取る
-                    //string results = p.StandardOutput.ReadToEnd();
-
+                    //sw.WriteLine(@"ffmpeg -i " + "\"" + outFilePath + "\"" + " -r 60 -vsync cfr -af aresample=async=1 -vcodec utvideo -acodec pcm_s16le " + "\"" + f + "\"");
+                    sw.WriteLine(@"ffmpeg -h");
+                    
                     //プロセス終了まで待機する
                     //WaitForExitはReadToEndの後である必要がある
                     //(親プロセス、子プロセスでブロック防止のため)
                     //p.WaitForExit();
 
 
-                    //出力された結果を表示
-                    //Console.WriteLine(results);
+                    
                 }
             }
             sw.Close();
+            */
+
             //Console.ReadLine();
             p.WaitForExit();
             p.Close();
-            
+            //出力された結果を表示
+            Console.WriteLine("1"+results);
+
+            foreach (string outFilePath in outFilePaths)
+            {
+                string f = outFilePath;
+                if (Path.GetExtension(f) == ".avi")
+                {
+                    f = Path.Combine(Path.GetDirectoryName(f), Path.GetFileNameWithoutExtension(f) + "-out");
+                }
+                f = Path.ChangeExtension(f, "avi");
+
+                p.StartInfo.Arguments = @"/c ffmpeg -i " + "\"" + outFilePath + "\"" + " -r 60 -vsync cfr -af aresample=async=1 -vcodec utvideo -acodec pcm_s16le " + "\"" + f + "\"";
+                p.Start();
+                //results = p.StandardOutput.ReadToEnd();
+                p.WaitForExit();
+                p.Close();
+                Console.WriteLine("output file: " + Path.GetFileName(f));
+            }
+
+            /*
+            p.StartInfo.Arguments = @"/c ffmpeg -h";
+            p.Start();
+            results = p.StandardOutput.ReadToEnd();
+            p.WaitForExit();
+            p.Close();
+            Console.WriteLine("2"+results);
+            */
+
         }
         //OutputDataReceivedイベントハンドラ
         //行が出力されるたびに呼び出される
