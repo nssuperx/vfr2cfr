@@ -13,7 +13,7 @@ namespace vfr2cfr
 {
     public partial class FormMain : Form
     {
-        private string[] outFilePaths;
+        private string[] inputFilePaths;
         public FormMain()
         {
             InitializeComponent();
@@ -25,12 +25,12 @@ namespace vfr2cfr
             if (dr == DialogResult.OK)
             {
                 openFilesList.Items.Clear();
-                outFilePaths = openFileDialog.FileNames;
-                if(outFilePaths.Length > 0)
+                inputFilePaths = openFileDialog.FileNames;
+                if(inputFilePaths.Length > 0)
                 {
                     outButton.Enabled = true;
                 }
-                foreach (string strFilePath in outFilePaths)
+                foreach (string strFilePath in inputFilePaths)
                 {
                     openFilesList.Items.Add(Path.GetFileName(strFilePath));
                 }
@@ -39,7 +39,37 @@ namespace vfr2cfr
 
         private void OutButton_Click(object sender, EventArgs e)
         {
-            
+            OutButtonClickMethod();
+        }
+
+        private async void OutButtonClickMethod()
+        {
+            foreach (string inputFilePath in inputFilePaths)
+            {
+                //出力ファイル名かぶらないように頑張る
+                string f = inputFilePath;
+                f = Path.ChangeExtension(f, "avi");
+                string[] outDirFiles = Directory.GetFiles(Path.GetDirectoryName(f));
+                while (Array.IndexOf(outDirFiles, f) != -1)
+                {
+                    f = Path.Combine(Path.GetDirectoryName(f), Path.GetFileNameWithoutExtension(f) + "-out.avi");
+                    outDirFiles = Directory.GetFiles(Path.GetDirectoryName(f));
+                }
+                string outputFilePath = f;
+
+                //テキストボックスに何か表示（入力ファイル名）
+                textBox.AppendText("Input file: " + Path.GetFileName(inputFilePath) + Environment.NewLine);
+                //非同期処理
+                //参考ページ:https://qiita.com/gonavi/items/2980b0791a4c14906cd1
+                //変換
+                await Task.Run(() => ConvertFile(inputFilePath, outputFilePath));
+                //テキストボックスに何か表示（出力ファイル名）
+                textBox.AppendText("Done. Output file: " + Path.GetFileName(outputFilePath) + Environment.NewLine);
+            }
+        }
+
+        private void ConvertFile(string inputFilePath, string outputFilePath)
+        {
             //参考ページ:https://dobon.net/vb/dotnet/process/standardoutput.html
             //Processオブジェクトを作成
             System.Diagnostics.Process p = new System.Diagnostics.Process();
@@ -54,38 +84,12 @@ namespace vfr2cfr
             //入力できるようにする
             p.StartInfo.RedirectStandardInput = true;
 
-            foreach (string outFilePath in outFilePaths)
-            {
-                string f = outFilePath;
-                f = Path.ChangeExtension(f, "avi");
-                string[] outDirFiles = Directory.GetFiles(Path.GetDirectoryName(f));
-                while (Array.IndexOf(outDirFiles, f) != -1)
-                {
-                    f = Path.Combine(Path.GetDirectoryName(f), Path.GetFileNameWithoutExtension(f) + "-out.avi");
-                    outDirFiles = Directory.GetFiles(Path.GetDirectoryName(f));
-                }
-
-                //Console.WriteLine("Input file: " + Path.GetFileName(outFilePath));
-                textBox.AppendText("Input file: " + Path.GetFileName(outFilePath) + Environment.NewLine);
-                p.StartInfo.Arguments = @"/c ffmpeg -i " + "\"" + outFilePath + "\"" + " -r 60 -vsync cfr -af aresample=async=1 -vcodec utvideo -acodec pcm_s16le " + "\"" + f + "\"";
-                //p.StartInfo.Arguments = @"/c ipconfig";
-                p.Start();
-                string results = p.StandardOutput.ReadToEnd();
-                p.WaitForExit();
-                p.Close();
-                textBox.AppendText(results + Environment.NewLine);
-                //Console.WriteLine("Done. output file: " + Path.GetFileName(f));
-                //textBox.AppendText("Done. output file: " + Path.GetFileName(f) + Environment.NewLine);
-            }
+            //Console.WriteLine("Input file: " + Path.GetFileName(inputFilePath));
+            p.StartInfo.Arguments = @"/c ffmpeg -i " + "\"" + inputFilePath + "\"" + " -r 60 -vsync cfr -af aresample=async=1 -vcodec utvideo -acodec pcm_s16le " + "\"" + outputFilePath + "\"";
+            p.Start();
+            p.WaitForExit();
+            p.Close();
+            //Console.WriteLine("Done. Output file: " + Path.GetFileName(outputFilePath));
         }
-
-        /*
-        static void p_OutputDataReceived(object sender, System.Diagnostics.DataReceivedEventArgs e)
-        {
-            //出力された文字列を表示する
-            Console.WriteLine(e.Data);
-        }
-        */
-
     }
 }
