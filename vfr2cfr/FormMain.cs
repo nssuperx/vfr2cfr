@@ -59,7 +59,7 @@ namespace vfr2cfr
                 string f = outFilePath;
                 f = Path.ChangeExtension(f, "avi");
                 string[] outDirFiles = Directory.GetFiles(Path.GetDirectoryName(f));
-                while (Array.IndexOf(outDirFiles,f) != -1)
+                while (Array.IndexOf(outDirFiles, f) != -1)
                 {
                     f = Path.Combine(Path.GetDirectoryName(f), Path.GetFileNameWithoutExtension(f) + "-out.avi");
                     outDirFiles = Directory.GetFiles(Path.GetDirectoryName(f));
@@ -68,12 +68,24 @@ namespace vfr2cfr
                 //Console.WriteLine("Input file: " + Path.GetFileName(outFilePath));
                 textBox.AppendText("Input file: " + Path.GetFileName(outFilePath) + Environment.NewLine);
                 p.StartInfo.Arguments = @"/c ffmpeg -i " + "\"" + outFilePath + "\"" + " -r 60 -vsync cfr -af aresample=async=1 -vcodec utvideo -acodec pcm_s16le " + "\"" + f + "\"";
+                //p.StartInfo.Arguments = @"/c ipconfig";
                 p.Start();
+                string results = p.StandardOutput.ReadToEnd();
                 p.WaitForExit();
                 p.Close();
+                textBox.AppendText(results + Environment.NewLine);
                 //Console.WriteLine("Done. output file: " + Path.GetFileName(f));
-                textBox.AppendText("Done. output file: " + Path.GetFileName(f) + Environment.NewLine);
+                //textBox.AppendText("Done. output file: " + Path.GetFileName(f) + Environment.NewLine);
             }
         }
+
+        /*
+        static void p_OutputDataReceived(object sender, System.Diagnostics.DataReceivedEventArgs e)
+        {
+            //出力された文字列を表示する
+            Console.WriteLine(e.Data);
+        }
+        */
+
     }
 }
