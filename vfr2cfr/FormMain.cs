@@ -39,6 +39,7 @@ namespace vfr2cfr
 
         private void OutButton_Click(object sender, EventArgs e)
         {
+            
             //参考ページ:https://dobon.net/vb/dotnet/process/standardoutput.html
             //Processオブジェクトを作成
             System.Diagnostics.Process p = new System.Diagnostics.Process();
@@ -56,11 +57,13 @@ namespace vfr2cfr
             foreach (string outFilePath in outFilePaths)
             {
                 string f = outFilePath;
-                if (Path.GetExtension(f) == ".avi")
-                {
-                    f = Path.Combine(Path.GetDirectoryName(f), Path.GetFileNameWithoutExtension(f) + "-out");
-                }
                 f = Path.ChangeExtension(f, "avi");
+                string[] outDirFiles = Directory.GetFiles(Path.GetDirectoryName(f));
+                while (Array.IndexOf(outDirFiles,f) != -1)
+                {
+                    f = Path.Combine(Path.GetDirectoryName(f), Path.GetFileNameWithoutExtension(f) + "-out.avi");
+                    outDirFiles = Directory.GetFiles(Path.GetDirectoryName(f));
+                }
 
                 //Console.WriteLine("Input file: " + Path.GetFileName(outFilePath));
                 textBox.AppendText("Input file: " + Path.GetFileName(outFilePath) + Environment.NewLine);
