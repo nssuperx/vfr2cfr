@@ -19,7 +19,7 @@ namespace vfr2cfr
             InitializeComponent();
         }
 
-        private void TestButton_Click(object sender, EventArgs e)
+        private void OpenButton_Click(object sender, EventArgs e)
         {
             DialogResult dr = openFileDialog.ShowDialog();
             if (dr == DialogResult.OK)
@@ -40,7 +40,9 @@ namespace vfr2cfr
         private void OutButton_Click(object sender, EventArgs e)
         {
             outButton.Enabled = false;
+            openButton.Enabled = false;
             OutButtonClickMethod();
+            
         }
 
         private async void OutButtonClickMethod()
@@ -67,6 +69,7 @@ namespace vfr2cfr
                 //テキストボックスに何か表示（出力ファイル名）
                 textBox.AppendText("Done. Output file: " + Path.GetFileName(outputFilePath) + Environment.NewLine);
             }
+            openButton.Enabled = true;
         }
 
         private void ConvertFile(string inputFilePath, string outputFilePath)
@@ -81,16 +84,33 @@ namespace vfr2cfr
             //出力を読み取れるようにする
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardOutput = true;
-
+            //OutputDataReceivedイベントハンドラを追加
+            p.OutputDataReceived += p_OutputDataReceived;
+            //p.ErrorDataReceived += p_OutputDataReceived;
             //入力できるようにする
-            p.StartInfo.RedirectStandardInput = true;
+            p.StartInfo.RedirectStandardInput = false;
 
             //Console.WriteLine("Input file: " + Path.GetFileName(inputFilePath));
-            p.StartInfo.Arguments = @"/c ffmpeg -i " + "\"" + inputFilePath + "\"" + " -r 60 -vsync cfr -af aresample=async=1 -vcodec utvideo -acodec pcm_s16le " + "\"" + outputFilePath + "\"";
+            p.StartInfo.Arguments = @"/c ffmpeg -i " + "\"" + inputFilePath + "\"" + " -progress - -r 60 -vsync cfr -af aresample=async=1 -vcodec utvideo -acodec pcm_s16le " + "\"" + outputFilePath + "\"";
             p.Start();
+            //OutputReadLine(p);
+            p.BeginOutputReadLine();
             p.WaitForExit();
             p.Close();
             //Console.WriteLine("Done. Output file: " + Path.GetFileName(outputFilePath));
+        }
+
+        static void p_OutputDataReceived(object sender, System.Diagnostics.DataReceivedEventArgs e)
+        {
+            if(e.Data == null)
+            {
+                return;
+            }
+            //出力された文字列を表示する
+            if (e.Data.Contains("out_time=") || e.Data.Contains("progress=end"))
+            {
+                Console.WriteLine(e.Data);
+            }
         }
     }
 }

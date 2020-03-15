@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.testButton = new System.Windows.Forms.Button();
+            this.openButton = new System.Windows.Forms.Button();
             this.outButton = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.openFilesList = new System.Windows.Forms.ListBox();
@@ -37,15 +37,15 @@
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.SuspendLayout();
             // 
-            // testButton
+            // openButton
             // 
-            this.testButton.Location = new System.Drawing.Point(108, 264);
-            this.testButton.Name = "testButton";
-            this.testButton.Size = new System.Drawing.Size(75, 23);
-            this.testButton.TabIndex = 0;
-            this.testButton.Text = "open";
-            this.testButton.UseVisualStyleBackColor = true;
-            this.testButton.Click += new System.EventHandler(this.TestButton_Click);
+            this.openButton.Location = new System.Drawing.Point(108, 264);
+            this.openButton.Name = "openButton";
+            this.openButton.Size = new System.Drawing.Size(75, 23);
+            this.openButton.TabIndex = 0;
+            this.openButton.Text = "open";
+            this.openButton.UseVisualStyleBackColor = true;
+            this.openButton.Click += new System.EventHandler(this.OpenButton_Click);
             // 
             // outButton
             // 
@@ -116,7 +116,7 @@
             this.Controls.Add(this.textBox);
             this.Controls.Add(this.openFilesList);
             this.Controls.Add(this.outButton);
-            this.Controls.Add(this.testButton);
+            this.Controls.Add(this.openButton);
             this.MinimumSize = new System.Drawing.Size(300, 39);
             this.Name = "FormMain";
             this.Text = "vfr2cfr";
@@ -127,7 +127,7 @@
 
         #endregion
 
-        private System.Windows.Forms.Button testButton;
+        private System.Windows.Forms.Button openButton;
         private System.Windows.Forms.Button outButton;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.ListBox openFilesList;
