@@ -33,6 +33,8 @@
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.openFilesList = new System.Windows.Forms.ListBox();
             this.textBox = new System.Windows.Forms.TextBox();
+            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.SuspendLayout();
             // 
             // testButton
@@ -75,20 +77,42 @@
             // 
             // textBox
             // 
+            this.textBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox.BackColor = System.Drawing.SystemColors.WindowText;
             this.textBox.ForeColor = System.Drawing.SystemColors.MenuHighlight;
             this.textBox.Location = new System.Drawing.Point(12, 135);
             this.textBox.Multiline = true;
             this.textBox.Name = "textBox";
+            this.textBox.ReadOnly = true;
             this.textBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBox.Size = new System.Drawing.Size(560, 123);
             this.textBox.TabIndex = 3;
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Location = new System.Drawing.Point(0, 327);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(584, 22);
+            this.statusStrip1.TabIndex = 4;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.progressBar1.Location = new System.Drawing.Point(12, 293);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(560, 23);
+            this.progressBar1.TabIndex = 5;
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 295);
+            this.ClientSize = new System.Drawing.Size(584, 349);
+            this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.textBox);
             this.Controls.Add(this.openFilesList);
             this.Controls.Add(this.outButton);
@@ -108,6 +132,8 @@
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.ListBox openFilesList;
         private System.Windows.Forms.TextBox textBox;
+        private System.Windows.Forms.StatusStrip statusStrip1;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }
 

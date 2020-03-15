@@ -39,6 +39,7 @@ namespace vfr2cfr
 
         private void OutButton_Click(object sender, EventArgs e)
         {
+            outButton.Enabled = false;
             OutButtonClickMethod();
         }
 
