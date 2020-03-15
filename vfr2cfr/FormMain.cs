@@ -90,14 +90,21 @@ namespace vfr2cfr
             //入力できるようにする
             p.StartInfo.RedirectStandardInput = false;
 
-            //Console.WriteLine("Input file: " + Path.GetFileName(inputFilePath));
-            p.StartInfo.Arguments = @"/c ffmpeg -i " + "\"" + inputFilePath + "\"" + " -progress - -r 60 -vsync cfr -af aresample=async=1 -vcodec utvideo -acodec pcm_s16le " + "\"" + outputFilePath + "\"";
+            //ffprobeで情報取得
+            p.StartInfo.Arguments = @"/c ffprobe " + "\"" + inputFilePath + "\"" + " -hide_banner -show_entries format=duration";
             p.Start();
-            //OutputReadLine(p);
             p.BeginOutputReadLine();
             p.WaitForExit();
+            p.CancelOutputRead();
             p.Close();
-            //Console.WriteLine("Done. Output file: " + Path.GetFileName(outputFilePath));
+
+            //ffmpegでエンコード
+            p.StartInfo.Arguments = @"/c ffmpeg -i " + "\"" + inputFilePath + "\"" + " -progress - -r 60 -vsync cfr -af aresample=async=1 -vcodec utvideo -acodec pcm_s16le " + "\"" + outputFilePath + "\"";
+            p.Start();
+            p.BeginOutputReadLine();
+            p.WaitForExit();
+            p.CancelOutputRead();
+            p.Close();
         }
 
         static void p_OutputDataReceived(object sender, System.Diagnostics.DataReceivedEventArgs e)
@@ -105,6 +112,11 @@ namespace vfr2cfr
             if(e.Data == null)
             {
                 return;
+            }
+
+            if (e.Data.Contains("duration"))
+            {
+                Console.WriteLine(e.Data);
             }
             //出力された文字列を表示する
             if (e.Data.Contains("out_time=") || e.Data.Contains("progress=end"))
