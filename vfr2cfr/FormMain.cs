@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.IO;
 
 namespace vfr2cfr
 {
     public partial class FormMain : Form
     {
         private string[] inputFilePaths;
+        private static TimeSpan videoDuration;
+        private static TimeSpan videoOuttime;
         public FormMain()
         {
             InitializeComponent();
@@ -64,6 +60,8 @@ namespace vfr2cfr
                 textBox.AppendText("Input file: " + Path.GetFileName(inputFilePath) + Environment.NewLine);
                 //非同期処理
                 //参考ページ:https://qiita.com/gonavi/items/2980b0791a4c14906cd1
+                //プログレスバーの更新
+                _ = Task.Run(() => UpdateProgressBarWorker());
                 //変換
                 await Task.Run(() => ConvertFile(inputFilePath, outputFilePath));
                 //テキストボックスに何か表示（出力ファイル名）
@@ -91,7 +89,7 @@ namespace vfr2cfr
             p.StartInfo.RedirectStandardInput = false;
 
             //ffprobeで情報取得
-            p.StartInfo.Arguments = @"/c ffprobe " + "\"" + inputFilePath + "\"" + " -hide_banner -show_entries format=duration";
+            p.StartInfo.Arguments = @"/c ffprobe " + "\"" + inputFilePath + "\"" + " -hide_banner -show_entries format=duration -sexagesimal";
             p.Start();
             p.BeginOutputReadLine();
             p.WaitForExit();
@@ -99,7 +97,7 @@ namespace vfr2cfr
             p.Close();
 
             //ffmpegでエンコード
-            p.StartInfo.Arguments = @"/c ffmpeg -i " + "\"" + inputFilePath + "\"" + " -progress - -r 60 -vsync cfr -af aresample=async=1 -vcodec utvideo -acodec pcm_s16le " + "\"" + outputFilePath + "\"";
+            p.StartInfo.Arguments = @"/c ffmpeg -i " + "\"" + inputFilePath + "\"" + " -progress - -r 30 -vsync cfr -af aresample=async=1 -vcodec utvideo -acodec pcm_s16le " + "\"" + outputFilePath + "\"";
             p.Start();
             p.BeginOutputReadLine();
             p.WaitForExit();
@@ -114,15 +112,65 @@ namespace vfr2cfr
                 return;
             }
 
-            if (e.Data.Contains("duration"))
+            if (e.Data.Contains("duration="))
+            {
+                //Console.WriteLine(e.Data);
+                videoDuration = TimeSpan.Parse(e.Data.Replace("duration=", ""));
+                Console.WriteLine(videoDuration);
+            }
+
+            if (e.Data.Contains("out_time="))
+            {
+                //Console.WriteLine(e.Data);
+                videoOuttime = TimeSpan.Parse(e.Data.Replace("out_time=", ""));
+                Console.WriteLine(videoOuttime);
+                //Console.WriteLine(videoOuttime.TotalMilliseconds / videoDuration.TotalMilliseconds);
+            }
+            if (e.Data.Contains("progress=end"))
             {
                 Console.WriteLine(e.Data);
+                videoOuttime = videoDuration;
             }
-            //出力された文字列を表示する
-            if (e.Data.Contains("out_time=") || e.Data.Contains("progress=end"))
+        }
+
+        delegate void UpdateProgressBarDelegate();
+        private void UpdateProgressBarWorker()
+        {
+            Invoke(new UpdateProgressBarDelegate(UpdateProgressBar));
+            /*
+            while (true)
             {
-                Console.WriteLine(e.Data);
+                if (videoOuttime == null || videoDuration == null)
+                {
+                    continue;
+                }
+                progressBar1.Value = (int)(videoOuttime.TotalMilliseconds / videoDuration.TotalMilliseconds) * 100;
+                if(progressBar1.Value >= 100)
+                {
+                    progressBar1.Value = 100;
+                    break;
+                }
             }
+            */
+            return;
+        }
+
+        private void UpdateProgressBar()
+        {
+            while (true)
+            {
+                if (videoOuttime == null || videoDuration == null)
+                {
+                    continue;
+                }
+                progressBar1.Value = (int)(videoOuttime.TotalMilliseconds / videoDuration.TotalMilliseconds) * 100;
+                if (progressBar1.Value >= 100)
+                {
+                    progressBar1.Value = 100;
+                    break;
+                }
+            }
+            return;
         }
     }
 }
