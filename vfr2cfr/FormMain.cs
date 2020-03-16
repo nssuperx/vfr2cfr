@@ -61,11 +61,13 @@ namespace vfr2cfr
                 //非同期処理
                 //参考ページ:https://qiita.com/gonavi/items/2980b0791a4c14906cd1
                 //プログレスバーの更新
-                _ = Task.Run(() => UpdateProgressBarWorker());
+                //_ = Task.Run(() => UpdateProgressBar());
+                timer1.Enabled = true;
                 //変換
                 await Task.Run(() => ConvertFile(inputFilePath, outputFilePath));
                 //テキストボックスに何か表示（出力ファイル名）
                 textBox.AppendText("Done. Output file: " + Path.GetFileName(outputFilePath) + Environment.NewLine);
+                timer1.Enabled = false;
             }
             openButton.Enabled = true;
         }
@@ -124,7 +126,8 @@ namespace vfr2cfr
                 //Console.WriteLine(e.Data);
                 videoOuttime = TimeSpan.Parse(e.Data.Replace("out_time=", ""));
                 Console.WriteLine(videoOuttime);
-                //Console.WriteLine(videoOuttime.TotalMilliseconds / videoDuration.TotalMilliseconds);
+                Console.WriteLine(videoOuttime.TotalMilliseconds / videoDuration.TotalMilliseconds);
+                //UpdateProgressBarWorker();
             }
             if (e.Data.Contains("progress=end"))
             {
@@ -137,40 +140,28 @@ namespace vfr2cfr
         private void UpdateProgressBarWorker()
         {
             Invoke(new UpdateProgressBarDelegate(UpdateProgressBar));
-            /*
-            while (true)
-            {
-                if (videoOuttime == null || videoDuration == null)
-                {
-                    continue;
-                }
-                progressBar1.Value = (int)(videoOuttime.TotalMilliseconds / videoDuration.TotalMilliseconds) * 100;
-                if(progressBar1.Value >= 100)
-                {
-                    progressBar1.Value = 100;
-                    break;
-                }
-            }
-            */
             return;
         }
 
         private void UpdateProgressBar()
         {
-            while (true)
+            if (videoOuttime == null || videoDuration == null)
             {
-                if (videoOuttime == null || videoDuration == null)
-                {
-                    continue;
-                }
-                progressBar1.Value = (int)(videoOuttime.TotalMilliseconds / videoDuration.TotalMilliseconds) * 100;
-                if (progressBar1.Value >= 100)
-                {
-                    progressBar1.Value = 100;
-                    break;
-                }
+                return;
             }
+            progressBar1.Value = (int)((videoOuttime.TotalMilliseconds / videoDuration.TotalMilliseconds) * 100.0);
+            if (progressBar1.Value >= 100)
+            {
+                progressBar1.Value = 100;
+            }
+            //Console.WriteLine(progressBar1.Value);
+            progressBar1.Update();
             return;
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            UpdateProgressBar();
         }
     }
 }

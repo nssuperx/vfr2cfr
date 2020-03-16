@@ -1,4 +1,6 @@
-﻿namespace vfr2cfr
+﻿using System.Windows.Forms;
+
+namespace vfr2cfr
 {
     partial class FormMain
     {
@@ -28,6 +30,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.openButton = new System.Windows.Forms.Button();
             this.outButton = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
@@ -35,6 +38,7 @@
             this.textBox = new System.Windows.Forms.TextBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.SuspendLayout();
             // 
             // openButton
@@ -106,6 +110,11 @@
             this.progressBar1.Size = new System.Drawing.Size(560, 23);
             this.progressBar1.TabIndex = 5;
             // 
+            // timer1
+            // 
+            this.timer1.Interval = 500;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -134,6 +143,7 @@
         private System.Windows.Forms.TextBox textBox;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ProgressBar progressBar1;
+        private Timer timer1;
     }
 }
 
