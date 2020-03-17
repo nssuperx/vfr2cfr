@@ -99,7 +99,7 @@ namespace vfr2cfr
             p.Close();
 
             //ffmpegでエンコード
-            p.StartInfo.Arguments = @"/c ffmpeg -i " + "\"" + inputFilePath + "\"" + " -progress - -r 30 -vsync cfr -af aresample=async=1 -vcodec utvideo -acodec pcm_s16le " + "\"" + outputFilePath + "\"";
+            p.StartInfo.Arguments = @"/c ffmpeg -i " + "\"" + inputFilePath + "\"" + " -progress - -r 30 -vsync cfr -af aresample=async=1 -vcodec utvideo -acodec pcm_s16le -colorspace bt709 -pix_fmt yuv422p " + "\"" + outputFilePath + "\"";
             p.Start();
             p.BeginOutputReadLine();
             p.WaitForExit();
@@ -136,29 +136,18 @@ namespace vfr2cfr
             }
         }
 
-        delegate void UpdateProgressBarDelegate();
-        private void UpdateProgressBarWorker()
-        {
-            Invoke(new UpdateProgressBarDelegate(UpdateProgressBar));
-            return;
-        }
-
         private void UpdateProgressBar()
         {
             if (videoOuttime == null || videoDuration == null)
             {
                 return;
             }
-            progressBar1.Value = (int)((videoOuttime.TotalMilliseconds / videoDuration.TotalMilliseconds) * 100.0);
-            if (progressBar1.Value >= 100)
-            {
-                progressBar1.Value = 100;
-            }
+            progressBar1.Value = Math.Min(Math.Max(0, (int)(videoOuttime.TotalMilliseconds / videoDuration.TotalMilliseconds * 100.0)), 100);
             //Console.WriteLine(progressBar1.Value);
-            progressBar1.Update();
+            //progressBar1.Update();
             return;
         }
-
+        
         private void timer1_Tick(object sender, EventArgs e)
         {
             UpdateProgressBar();
