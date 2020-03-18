@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace vfr2cfr
 {
@@ -14,6 +14,7 @@ namespace vfr2cfr
         private static int progressBarValue = 0;
         private readonly int[] fpsArray = {60,30};
         private int selectedFps = 0;
+        private bool isEncoding = false;
 
         public FormMain()
         {
@@ -59,6 +60,7 @@ namespace vfr2cfr
         {
             textBox.Clear();
             int encodeingVideoNum = 0;
+            isEncoding = true;
             foreach (string inputFilePath in inputFilePaths)
             {
                 //プログレスバーの値の初期化
@@ -67,7 +69,7 @@ namespace vfr2cfr
                 progressBarValue = 0;
                 //StatusStripに文字列を出す。
                 encodeingVideoNum++;
-                toolStripStatusLabel1.Text = "(" + encodeingVideoNum.ToString() + " / " + inputFilePaths.Length.ToString() + ")" + "変換中:" + Path.GetFileName(inputFilePaths[encodeingVideoNum - 1]);
+                toolStripStatusLabel1.Text = "(" + encodeingVideoNum.ToString() + " / " + inputFilePaths.Length.ToString() + ")" + "変換中["+ fpsArray[selectedFps].ToString() + "fps]:" + Path.GetFileName(inputFilePaths[encodeingVideoNum - 1]);
                 //出力ファイル名かぶらないように頑張る
                 string f = inputFilePath;
                 f = Path.ChangeExtension(f, "avi");
@@ -95,6 +97,7 @@ namespace vfr2cfr
             }
             toolStripStatusLabel1.Text = "すべての変換が完了しました";
             openButton.Enabled = true;
+            isEncoding = false;
             //timer1.Enabled = false;
         }
 
@@ -102,9 +105,9 @@ namespace vfr2cfr
         {
             //参考ページ:https://dobon.net/vb/dotnet/process/standardoutput.html
             //Processオブジェクトを作成
-            System.Diagnostics.Process p = new System.Diagnostics.Process();
+            Process p = new Process();
             //ComSpec(cmd.exe)のパスを取得して、FileNameプロパティに指定
-            p.StartInfo.FileName = System.Environment.GetEnvironmentVariable("ComSpec");
+            p.StartInfo.FileName = Environment.GetEnvironmentVariable("ComSpec");
             p.StartInfo.CreateNoWindow = true;
 
             //出力を読み取れるようにする
@@ -182,6 +185,17 @@ namespace vfr2cfr
         {
             selectedFps = (selectedFps + 1) % fpsArray.Length;
             fpsButton.Text = fpsArray[selectedFps].ToString() + " fps";
+        }
+
+        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (isEncoding)
+            {
+                if (MessageBox.Show("変換の途中です!! 終了してもいいですか？", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+                {
+                    e.Cancel = true;
+                }
+            }
         }
     }
 }

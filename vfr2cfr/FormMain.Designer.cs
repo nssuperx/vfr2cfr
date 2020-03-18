@@ -119,8 +119,10 @@ namespace vfr2cfr
             // toolStripStatusLabel1
             // 
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(13, 17);
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(238, 17);
+            this.toolStripStatusLabel1.Spring = true;
             this.toolStripStatusLabel1.Text = "  ";
+            this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // progressBar1
             // 
@@ -194,6 +196,7 @@ namespace vfr2cfr
             this.MinimumSize = new System.Drawing.Size(300, 400);
             this.Name = "FormMain";
             this.Text = "vfr2cfr";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
