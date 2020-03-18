@@ -51,6 +51,10 @@ namespace vfr2cfr
             int encodeingVideoNum = 0;
             foreach (string inputFilePath in inputFilePaths)
             {
+                //プログレスバーの値の初期化
+                videoDuration = 0.0;
+                videoOuttime = 0.0;
+                progressBarValue = 0;
                 //StatusStripに文字列を出す。
                 encodeingVideoNum++;
                 toolStripStatusLabel1.Text = "(" + encodeingVideoNum.ToString() + " / " + inputFilePaths.Length.ToString() + ")" + "変換中:" + Path.GetFileName(inputFilePaths[encodeingVideoNum - 1]);
@@ -128,7 +132,6 @@ namespace vfr2cfr
 
             if (e.Data.Contains("duration="))
             {
-                //Console.WriteLine(e.Data);
                 videoDuration = double.Parse(e.Data.Replace("duration=", "")) * Math.Pow(10, 6);
                 Console.WriteLine(videoDuration);
                 return;
@@ -136,17 +139,16 @@ namespace vfr2cfr
 
             if (e.Data.Contains("out_time_us="))
             {
-                //Console.WriteLine(e.Data);
                 videoOuttime = double.Parse(e.Data.Replace("out_time_us=", ""));
                 Console.WriteLine(videoOuttime);
-                //Console.WriteLine(videoOuttime / videoDuration);
+                progressBarValue = (int)Math.Min(Math.Max(0, (videoOuttime / videoDuration * 100)), 100);
             }
             if (e.Data.Contains("progress=end"))
             {
                 Console.WriteLine(e.Data);
-                videoOuttime = videoDuration;
+                progressBarValue = 100;
+                return;
             }
-            progressBarValue = (int)Math.Min(Math.Max(0, (videoOuttime / videoDuration * 100)), 100);
         }
 
         private void UpdateProgressBar()
