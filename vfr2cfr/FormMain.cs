@@ -166,5 +166,10 @@ namespace vfr2cfr
         {
             UpdateProgressBar();
         }
+
+        private void fpsButton_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
