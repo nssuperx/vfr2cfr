@@ -8,8 +8,8 @@ namespace vfr2cfr
     public partial class FormMain : Form
     {
         private string[] inputFilePaths;
-        private static TimeSpan videoDuration;
-        private static TimeSpan videoOuttime;
+        private static double videoDuration = 0;
+        private static double videoOuttime = 0;
         public FormMain()
         {
             InitializeComponent();
@@ -61,7 +61,6 @@ namespace vfr2cfr
                 //非同期処理
                 //参考ページ:https://qiita.com/gonavi/items/2980b0791a4c14906cd1
                 //プログレスバーの更新
-                //_ = Task.Run(() => UpdateProgressBar());
                 timer1.Enabled = true;
                 //変換
                 await Task.Run(() => ConvertFile(inputFilePath, outputFilePath));
@@ -86,12 +85,11 @@ namespace vfr2cfr
             p.StartInfo.RedirectStandardOutput = true;
             //OutputDataReceivedイベントハンドラを追加
             p.OutputDataReceived += p_OutputDataReceived;
-            //p.ErrorDataReceived += p_OutputDataReceived;
             //入力できるようにする
             p.StartInfo.RedirectStandardInput = false;
 
             //ffprobeで情報取得
-            p.StartInfo.Arguments = @"/c ffprobe " + "\"" + inputFilePath + "\"" + " -hide_banner -show_entries format=duration -sexagesimal";
+            p.StartInfo.Arguments = @"/c ffprobe " + "\"" + inputFilePath + "\"" + " -hide_banner -show_entries format=duration";
             p.Start();
             p.BeginOutputReadLine();
             p.WaitForExit();
@@ -113,21 +111,21 @@ namespace vfr2cfr
             {
                 return;
             }
+            //Console.WriteLine(e.Data);
 
             if (e.Data.Contains("duration="))
             {
                 //Console.WriteLine(e.Data);
-                videoDuration = TimeSpan.Parse(e.Data.Replace("duration=", ""));
+                videoDuration = double.Parse(e.Data.Replace("duration=", "")) * Math.Pow(10, 6);
                 Console.WriteLine(videoDuration);
             }
 
-            if (e.Data.Contains("out_time="))
+            if (e.Data.Contains("out_time_us="))
             {
                 //Console.WriteLine(e.Data);
-                videoOuttime = TimeSpan.Parse(e.Data.Replace("out_time=", ""));
+                videoOuttime = double.Parse(e.Data.Replace("out_time_us=", ""));
                 Console.WriteLine(videoOuttime);
-                Console.WriteLine(videoOuttime.TotalMilliseconds / videoDuration.TotalMilliseconds);
-                //UpdateProgressBarWorker();
+                //Console.WriteLine(videoOuttime / videoDuration);
             }
             if (e.Data.Contains("progress=end"))
             {
@@ -138,12 +136,12 @@ namespace vfr2cfr
 
         private void UpdateProgressBar()
         {
-            if (videoOuttime == null || videoDuration == null)
+            if ((int)videoOuttime == 0 || (int)videoDuration == 0)
             {
                 return;
             }
-            progressBar1.Value = Math.Min(Math.Max(0, (int)(videoOuttime.TotalMilliseconds / videoDuration.TotalMilliseconds * 100.0)), 100);
-            //Console.WriteLine(progressBar1.Value);
+            progressBar1.Value = (int)Math.Min(Math.Max(0, (videoOuttime / videoDuration * 100)), 100);
+            Console.WriteLine(progressBar1.Value);
             //progressBar1.Update();
             return;
         }
