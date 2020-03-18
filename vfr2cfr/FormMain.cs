@@ -8,10 +8,9 @@ namespace vfr2cfr
     public partial class FormMain : Form
     {
         private string[] inputFilePaths;
-        private static double videoDuration = 0;
-        private static double videoOuttime = 0;
+        private static double videoDuration = 0.0;
+        private static double videoOuttime = 0.0;
         private static int progressBarValue = 0;
-        private static int encodeingVideoNum = 0;
         public FormMain()
         {
             InitializeComponent();
@@ -19,6 +18,9 @@ namespace vfr2cfr
 
         private void OpenButton_Click(object sender, EventArgs e)
         {
+            progressBar1.Value = 0;
+            videoDuration = 0.0;
+            videoOuttime = 0.0;
             DialogResult dr = openFileDialog.ShowDialog();
             if (dr == DialogResult.OK)
             {
@@ -45,10 +47,13 @@ namespace vfr2cfr
 
         private async void OutButtonClickMethod()
         {
-            encodeingVideoNum = 0;
+            textBox.Clear();
+            int encodeingVideoNum = 0;
             foreach (string inputFilePath in inputFilePaths)
             {
+                //StatusStripに文字列を出す。
                 encodeingVideoNum++;
+                toolStripStatusLabel1.Text = "(" + encodeingVideoNum.ToString() + " / " + inputFilePaths.Length.ToString() + ")" + "変換中:" + Path.GetFileName(inputFilePaths[encodeingVideoNum - 1]);
                 //出力ファイル名かぶらないように頑張る
                 string f = inputFilePath;
                 f = Path.ChangeExtension(f, "avi");
@@ -61,7 +66,7 @@ namespace vfr2cfr
                 string outputFilePath = f;
 
                 //テキストボックスに何か表示（入力ファイル名）
-                textBox.AppendText("Input file: " + Path.GetFileName(inputFilePath) + Environment.NewLine);
+                textBox.AppendText("変換元: " + Path.GetFileName(inputFilePath) + Environment.NewLine);
                 //非同期処理
                 //参考ページ:https://qiita.com/gonavi/items/2980b0791a4c14906cd1
                 //プログレスバーの更新
@@ -69,11 +74,14 @@ namespace vfr2cfr
                 //変換
                 await Task.Run(() => ConvertFile(inputFilePath, outputFilePath));
                 //テキストボックスに何か表示（出力ファイル名）
-                textBox.AppendText("Done. Output file: " + Path.GetFileName(outputFilePath) + Environment.NewLine);
-                //timer1.Enabled = false;
+                textBox.AppendText("変換後: " + Path.GetFileName(outputFilePath) + Environment.NewLine);
+                timer1.Enabled = false;
+                //最後に一回
+                UpdateProgressBar();
             }
+            toolStripStatusLabel1.Text = "すべての変換が完了しました";
             openButton.Enabled = true;
-            timer1.Enabled = false;
+            //timer1.Enabled = false;
         }
 
         private void ConvertFile(string inputFilePath, string outputFilePath)
@@ -149,19 +157,12 @@ namespace vfr2cfr
             }
             progressBar1.Value = progressBarValue;
             Console.WriteLine(progressBar1.Value);
-            //progressBar1.Update();
             return;
-        }
-
-        private void UpdateStatusStrip()
-        {
-            toolStripStatusLabel1.Text = inputFilePaths[encodeingVideoNum - 1];
         }
         
         private void timer1_Tick(object sender, EventArgs e)
         {
             UpdateProgressBar();
-            UpdateStatusStrip();
         }
     }
 }
