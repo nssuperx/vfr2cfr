@@ -57,6 +57,12 @@ namespace vfr2cfr
             
         }
 
+        private void FpsButton_Click(object sender, EventArgs e)
+        {
+            selectedFps = (selectedFps + 1) % fpsArray.Length;
+            fpsButton.Text = fpsArray[selectedFps].ToString() + " fps";
+        }
+
         private async void OutButtonClickMethod()
         {
             textBox.Clear();
@@ -99,7 +105,6 @@ namespace vfr2cfr
             toolStripStatusLabel1.Text = "すべての変換が完了しました";
             openButton.Enabled = true;
             isEncoding = false;
-            //timer1.Enabled = false;
         }
 
         private void ConvertFile(string inputFilePath, string outputFilePath)
@@ -130,6 +135,7 @@ namespace vfr2cfr
             //ffmpegでエンコード
             p.StartInfo.Arguments = @"/c ffmpeg -i " + "\"" + inputFilePath + "\"" + " -progress - -r " + fpsArray[selectedFps].ToString() + " -vsync cfr -af aresample=async=1 -vcodec utvideo -acodec pcm_s16le -colorspace bt709 -pix_fmt yuv422p " + "\"" + outputFilePath + "\"";
             p.Start();
+            //強制killするためにpidをもっとく
             ffmpegPid = p.Id;
             p.BeginOutputReadLine();
             p.WaitForExit();
@@ -137,7 +143,7 @@ namespace vfr2cfr
             p.Close();
         }
 
-        static void p_OutputDataReceived(object sender, System.Diagnostics.DataReceivedEventArgs e)
+        static void p_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
             if(e.Data == null)
             {
@@ -183,13 +189,6 @@ namespace vfr2cfr
             //Console.WriteLine("ffmpegPid=" + ffmpegPid.ToString());
         }
 
-
-        private void FpsButton_Click(object sender, EventArgs e)
-        {
-            selectedFps = (selectedFps + 1) % fpsArray.Length;
-            fpsButton.Text = fpsArray[selectedFps].ToString() + " fps";
-        }
-
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (isEncoding)
@@ -206,9 +205,9 @@ namespace vfr2cfr
             }
         }
 
-        //参考ページ:https://qiita.com/yohhoy/items/b6e32e17c9d568f927d8
-        void KillProcessTree(Process process)
+        private void KillProcessTree(Process process)
         {
+            //参考ページ:https://qiita.com/yohhoy/items/b6e32e17c9d568f927d8
             string taskkill = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "taskkill.exe");
             using (var procKiller = new Process())
             {
