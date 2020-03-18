@@ -2,6 +2,7 @@
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace vfr2cfr
 {
@@ -11,9 +12,18 @@ namespace vfr2cfr
         private static double videoDuration = 0.0;
         private static double videoOuttime = 0.0;
         private static int progressBarValue = 0;
+        private readonly int[] fpsArray = {60,30};
+        private int selectedFps = 0;
+
         public FormMain()
         {
             InitializeComponent();
+        }
+
+        private void FormMain_Load(object sender, EventArgs e)
+        {
+            selectedFps = 0;
+            fpsButton.Text = fpsArray[selectedFps].ToString() + " fps";
         }
 
         private void OpenButton_Click(object sender, EventArgs e)
@@ -114,7 +124,7 @@ namespace vfr2cfr
             p.Close();
 
             //ffmpegでエンコード
-            p.StartInfo.Arguments = @"/c ffmpeg -i " + "\"" + inputFilePath + "\"" + " -progress - -r 30 -vsync cfr -af aresample=async=1 -vcodec utvideo -acodec pcm_s16le -colorspace bt709 -pix_fmt yuv422p " + "\"" + outputFilePath + "\"";
+            p.StartInfo.Arguments = @"/c ffmpeg -i " + "\"" + inputFilePath + "\"" + " -progress - -r " + fpsArray[selectedFps].ToString() + " -vsync cfr -af aresample=async=1 -vcodec utvideo -acodec pcm_s16le -colorspace bt709 -pix_fmt yuv422p " + "\"" + outputFilePath + "\"";
             p.Start();
             p.BeginOutputReadLine();
             p.WaitForExit();
@@ -162,14 +172,16 @@ namespace vfr2cfr
             return;
         }
         
-        private void timer1_Tick(object sender, EventArgs e)
+        private void Timer1_Tick(object sender, EventArgs e)
         {
             UpdateProgressBar();
         }
 
-        private void fpsButton_Click(object sender, EventArgs e)
-        {
 
+        private void FpsButton_Click(object sender, EventArgs e)
+        {
+            selectedFps = (selectedFps + 1) % fpsArray.Length;
+            fpsButton.Text = fpsArray[selectedFps].ToString() + " fps";
         }
     }
 }

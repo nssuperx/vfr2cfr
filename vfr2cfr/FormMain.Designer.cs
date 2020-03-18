@@ -134,7 +134,7 @@ namespace vfr2cfr
             // timer1
             // 
             this.timer1.Interval = 200;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
             // 
             // tableLayoutPanel1
             // 
@@ -180,7 +180,7 @@ namespace vfr2cfr
             this.fpsButton.TabIndex = 2;
             this.fpsButton.Text = "60 fps";
             this.fpsButton.UseVisualStyleBackColor = true;
-            this.fpsButton.Click += new System.EventHandler(this.fpsButton_Click);
+            this.fpsButton.Click += new System.EventHandler(this.FpsButton_Click);
             // 
             // FormMain
             // 
@@ -194,6 +194,7 @@ namespace vfr2cfr
             this.MinimumSize = new System.Drawing.Size(300, 400);
             this.Name = "FormMain";
             this.Text = "vfr2cfr";
+            this.Load += new System.EventHandler(this.FormMain_Load);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
