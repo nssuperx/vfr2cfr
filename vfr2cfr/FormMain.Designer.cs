@@ -55,7 +55,7 @@ namespace vfr2cfr
             this.openButton.Name = "openButton";
             this.openButton.Size = new System.Drawing.Size(75, 27);
             this.openButton.TabIndex = 0;
-            this.openButton.Text = "open";
+            this.openButton.Text = "開く";
             this.openButton.UseVisualStyleBackColor = true;
             this.openButton.Click += new System.EventHandler(this.OpenButton_Click);
             // 
@@ -67,7 +67,7 @@ namespace vfr2cfr
             this.outButton.Name = "outButton";
             this.outButton.Size = new System.Drawing.Size(75, 27);
             this.outButton.TabIndex = 1;
-            this.outButton.Text = "convert";
+            this.outButton.Text = "変換";
             this.outButton.UseVisualStyleBackColor = true;
             this.outButton.Click += new System.EventHandler(this.OutButton_Click);
             // 
