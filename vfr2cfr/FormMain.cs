@@ -15,6 +15,7 @@ namespace vfr2cfr
         private readonly int[] fpsArray = {60,30};
         private int selectedFps = 0;
         private bool isEncoding = false;
+        private int ffmpegPid;
 
         public FormMain()
         {
@@ -129,6 +130,7 @@ namespace vfr2cfr
             //ffmpegでエンコード
             p.StartInfo.Arguments = @"/c ffmpeg -i " + "\"" + inputFilePath + "\"" + " -progress - -r " + fpsArray[selectedFps].ToString() + " -vsync cfr -af aresample=async=1 -vcodec utvideo -acodec pcm_s16le -colorspace bt709 -pix_fmt yuv422p " + "\"" + outputFilePath + "\"";
             p.Start();
+            ffmpegPid = p.Id;
             p.BeginOutputReadLine();
             p.WaitForExit();
             p.CancelOutputRead();
@@ -146,19 +148,19 @@ namespace vfr2cfr
             if (e.Data.Contains("duration="))
             {
                 videoDuration = double.Parse(e.Data.Replace("duration=", "")) * Math.Pow(10, 6);
-                Console.WriteLine(videoDuration);
+                //Console.WriteLine(videoDuration);
                 return;
             }
 
             if (e.Data.Contains("out_time_us="))
             {
                 videoOuttime = double.Parse(e.Data.Replace("out_time_us=", ""));
-                Console.WriteLine(videoOuttime);
+                //Console.WriteLine(videoOuttime);
                 progressBarValue = (int)Math.Min(Math.Max(0, (videoOuttime / videoDuration * 100)), 100);
             }
             if (e.Data.Contains("progress=end"))
             {
-                Console.WriteLine(e.Data);
+                //Console.WriteLine(e.Data);
                 progressBarValue = 100;
                 return;
             }
@@ -171,13 +173,14 @@ namespace vfr2cfr
                 return;
             }
             progressBar1.Value = progressBarValue;
-            Console.WriteLine(progressBar1.Value);
+            //Console.WriteLine(progressBar1.Value);
             return;
         }
         
         private void Timer1_Tick(object sender, EventArgs e)
         {
             UpdateProgressBar();
+            //Console.WriteLine("ffmpegPid=" + ffmpegPid.ToString());
         }
 
 
@@ -195,6 +198,26 @@ namespace vfr2cfr
                 {
                     e.Cancel = true;
                 }
+                else
+                {
+                    Process kp = Process.GetProcessById(ffmpegPid);
+                    KillProcessTree(kp);
+                }
+            }
+        }
+
+        //参考ページ:https://qiita.com/yohhoy/items/b6e32e17c9d568f927d8
+        void KillProcessTree(Process process)
+        {
+            string taskkill = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "taskkill.exe");
+            using (var procKiller = new Process())
+            {
+                procKiller.StartInfo.FileName = taskkill;
+                procKiller.StartInfo.Arguments = string.Format("/PID {0} /T /F", process.Id);
+                procKiller.StartInfo.CreateNoWindow = true;
+                procKiller.StartInfo.UseShellExecute = false;
+                procKiller.Start();
+                procKiller.WaitForExit();
             }
         }
     }
