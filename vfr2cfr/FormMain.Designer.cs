@@ -40,14 +40,19 @@ namespace vfr2cfr
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.statusStrip1.SuspendLayout();
+            this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // openButton
             // 
-            this.openButton.Location = new System.Drawing.Point(108, 264);
+            this.openButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.openButton.Location = new System.Drawing.Point(27, 3);
             this.openButton.Name = "openButton";
-            this.openButton.Size = new System.Drawing.Size(75, 23);
+            this.openButton.Size = new System.Drawing.Size(75, 27);
             this.openButton.TabIndex = 0;
             this.openButton.Text = "open";
             this.openButton.UseVisualStyleBackColor = true;
@@ -55,10 +60,11 @@ namespace vfr2cfr
             // 
             // outButton
             // 
+            this.outButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.outButton.Enabled = false;
-            this.outButton.Location = new System.Drawing.Point(404, 264);
+            this.outButton.Location = new System.Drawing.Point(157, 3);
             this.outButton.Name = "outButton";
-            this.outButton.Size = new System.Drawing.Size(75, 23);
+            this.outButton.Size = new System.Drawing.Size(75, 27);
             this.outButton.TabIndex = 1;
             this.outButton.Text = "convert";
             this.outButton.UseVisualStyleBackColor = true;
@@ -71,37 +77,41 @@ namespace vfr2cfr
             // 
             // openFilesList
             // 
-            this.openFilesList.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.openFilesList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.openFilesList.FormattingEnabled = true;
             this.openFilesList.HorizontalScrollbar = true;
             this.openFilesList.ItemHeight = 12;
-            this.openFilesList.Location = new System.Drawing.Point(12, 17);
+            this.openFilesList.Location = new System.Drawing.Point(0, 0);
+            this.openFilesList.Margin = new System.Windows.Forms.Padding(0, 0, 0, 3);
             this.openFilesList.Name = "openFilesList";
-            this.openFilesList.Size = new System.Drawing.Size(560, 112);
+            this.openFilesList.Size = new System.Drawing.Size(260, 124);
             this.openFilesList.TabIndex = 2;
             // 
             // textBox
             // 
-            this.textBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.textBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox.BackColor = System.Drawing.SystemColors.WindowText;
             this.textBox.ForeColor = System.Drawing.SystemColors.MenuHighlight;
-            this.textBox.Location = new System.Drawing.Point(12, 135);
+            this.textBox.Location = new System.Drawing.Point(0, 132);
+            this.textBox.Margin = new System.Windows.Forms.Padding(0, 3, 0, 3);
             this.textBox.Multiline = true;
             this.textBox.Name = "textBox";
             this.textBox.ReadOnly = true;
-            this.textBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox.Size = new System.Drawing.Size(560, 123);
+            this.textBox.Size = new System.Drawing.Size(260, 123);
             this.textBox.TabIndex = 3;
+            this.textBox.WordWrap = false;
             // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 327);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 339);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(584, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(284, 22);
             this.statusStrip1.TabIndex = 4;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -113,11 +123,11 @@ namespace vfr2cfr
             // 
             // progressBar1
             // 
-            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar1.Location = new System.Drawing.Point(12, 293);
+            this.progressBar1.Location = new System.Drawing.Point(12, 313);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(560, 23);
+            this.progressBar1.Size = new System.Drawing.Size(260, 23);
             this.progressBar1.TabIndex = 5;
             // 
             // timer1
@@ -125,22 +135,57 @@ namespace vfr2cfr
             this.timer1.Interval = 200;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // tableLayoutPanel1
+            // 
+            this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel1.ColumnCount = 1;
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel1.Controls.Add(this.openFilesList, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.textBox, 0, 1);
+            this.tableLayoutPanel1.Location = new System.Drawing.Point(12, 12);
+            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
+            this.tableLayoutPanel1.RowCount = 2;
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(260, 258);
+            this.tableLayoutPanel1.TabIndex = 6;
+            // 
+            // tableLayoutPanel2
+            // 
+            this.tableLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tableLayoutPanel2.ColumnCount = 2;
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.Controls.Add(this.outButton, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.openButton, 0, 0);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(12, 276);
+            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
+            this.tableLayoutPanel2.RowCount = 1;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 33F));
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(260, 33);
+            this.tableLayoutPanel2.TabIndex = 7;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(584, 349);
+            this.ClientSize = new System.Drawing.Size(284, 361);
+            this.Controls.Add(this.tableLayoutPanel2);
+            this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.textBox);
-            this.Controls.Add(this.openFilesList);
-            this.Controls.Add(this.outButton);
-            this.Controls.Add(this.openButton);
-            this.MinimumSize = new System.Drawing.Size(300, 39);
+            this.MinimumSize = new System.Drawing.Size(300, 400);
             this.Name = "FormMain";
             this.Text = "vfr2cfr";
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanel1.PerformLayout();
+            this.tableLayoutPanel2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -157,6 +202,8 @@ namespace vfr2cfr
         private System.Windows.Forms.ProgressBar progressBar1;
         private Timer timer1;
         private ToolStripStatusLabel toolStripStatusLabel1;
+        private TableLayoutPanel tableLayoutPanel1;
+        private TableLayoutPanel tableLayoutPanel2;
     }
 }
 
