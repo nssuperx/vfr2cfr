@@ -10,6 +10,7 @@ namespace vfr2cfr
         private string[] inputFilePaths;
         private static double videoDuration = 0;
         private static double videoOuttime = 0;
+        private static int progressBarValue = 0;
         public FormMain()
         {
             InitializeComponent();
@@ -66,9 +67,10 @@ namespace vfr2cfr
                 await Task.Run(() => ConvertFile(inputFilePath, outputFilePath));
                 //テキストボックスに何か表示（出力ファイル名）
                 textBox.AppendText("Done. Output file: " + Path.GetFileName(outputFilePath) + Environment.NewLine);
-                timer1.Enabled = false;
+                //timer1.Enabled = false;
             }
             openButton.Enabled = true;
+            timer1.Enabled = false;
         }
 
         private void ConvertFile(string inputFilePath, string outputFilePath)
@@ -118,6 +120,7 @@ namespace vfr2cfr
                 //Console.WriteLine(e.Data);
                 videoDuration = double.Parse(e.Data.Replace("duration=", "")) * Math.Pow(10, 6);
                 Console.WriteLine(videoDuration);
+                return;
             }
 
             if (e.Data.Contains("out_time_us="))
@@ -132,15 +135,16 @@ namespace vfr2cfr
                 Console.WriteLine(e.Data);
                 videoOuttime = videoDuration;
             }
+            progressBarValue = (int)Math.Min(Math.Max(0, (videoOuttime / videoDuration * 100)), 100);
         }
 
         private void UpdateProgressBar()
         {
-            if ((int)videoOuttime == 0 || (int)videoDuration == 0)
+            if ((int)videoDuration == 0)
             {
                 return;
             }
-            progressBar1.Value = (int)Math.Min(Math.Max(0, (videoOuttime / videoDuration * 100)), 100);
+            progressBar1.Value = progressBarValue;
             Console.WriteLine(progressBar1.Value);
             //progressBar1.Update();
             return;
