@@ -51,7 +51,7 @@ namespace vfr2cfr
             // openButton
             // 
             this.openButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.openButton.Location = new System.Drawing.Point(8, 3);
+            this.openButton.Location = new System.Drawing.Point(5, 3);
             this.openButton.Name = "openButton";
             this.openButton.Size = new System.Drawing.Size(75, 27);
             this.openButton.TabIndex = 0;
@@ -63,7 +63,7 @@ namespace vfr2cfr
             // 
             this.outButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
             this.outButton.Enabled = false;
-            this.outButton.Location = new System.Drawing.Point(177, 3);
+            this.outButton.Location = new System.Drawing.Point(178, 3);
             this.outButton.Name = "outButton";
             this.outButton.Size = new System.Drawing.Size(75, 27);
             this.outButton.TabIndex = 1;
@@ -174,7 +174,7 @@ namespace vfr2cfr
             // fpsButton
             // 
             this.fpsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.fpsButton.Location = new System.Drawing.Point(94, 3);
+            this.fpsButton.Location = new System.Drawing.Point(91, 3);
             this.fpsButton.Name = "fpsButton";
             this.fpsButton.Size = new System.Drawing.Size(75, 27);
             this.fpsButton.TabIndex = 2;
