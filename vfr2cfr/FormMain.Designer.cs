@@ -39,6 +39,8 @@ namespace vfr2cfr
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // openButton
@@ -95,6 +97,8 @@ namespace vfr2cfr
             // 
             // statusStrip1
             // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1});
             this.statusStrip1.Location = new System.Drawing.Point(0, 327);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(584, 22);
@@ -115,6 +119,12 @@ namespace vfr2cfr
             this.timer1.Interval = 200;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // toolStripStatusLabel1
+            // 
+            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(118, 17);
+            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -129,6 +139,8 @@ namespace vfr2cfr
             this.MinimumSize = new System.Drawing.Size(300, 39);
             this.Name = "FormMain";
             this.Text = "vfr2cfr";
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -144,6 +156,7 @@ namespace vfr2cfr
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ProgressBar progressBar1;
         private Timer timer1;
+        private ToolStripStatusLabel toolStripStatusLabel1;
     }
 }
 

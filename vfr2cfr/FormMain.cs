@@ -11,6 +11,7 @@ namespace vfr2cfr
         private static double videoDuration = 0;
         private static double videoOuttime = 0;
         private static int progressBarValue = 0;
+        private static int encodeingVideoNum = 0;
         public FormMain()
         {
             InitializeComponent();
@@ -44,8 +45,10 @@ namespace vfr2cfr
 
         private async void OutButtonClickMethod()
         {
+            encodeingVideoNum = 0;
             foreach (string inputFilePath in inputFilePaths)
             {
+                encodeingVideoNum++;
                 //出力ファイル名かぶらないように頑張る
                 string f = inputFilePath;
                 f = Path.ChangeExtension(f, "avi");
@@ -149,10 +152,16 @@ namespace vfr2cfr
             //progressBar1.Update();
             return;
         }
+
+        private void UpdateStatusStrip()
+        {
+            toolStripStatusLabel1.Text = inputFilePaths[encodeingVideoNum - 1];
+        }
         
         private void timer1_Tick(object sender, EventArgs e)
         {
             UpdateProgressBar();
+            UpdateStatusStrip();
         }
     }
 }
