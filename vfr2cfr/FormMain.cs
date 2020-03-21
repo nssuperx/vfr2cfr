@@ -12,6 +12,7 @@ namespace vfr2cfr
         private static double videoDuration = 0.0;
         private static double videoOuttime = 0.0;
         private static int progressBarValue = 0;
+        private static bool isError = false;
         private readonly int[] fpsArray = {60,30};
         private int selectedFps = 0;
         private bool isEncoding = false;
@@ -89,26 +90,34 @@ namespace vfr2cfr
                 string outputFilePath = f;
 
                 //テキストボックスに何か表示（入力ファイル名）
-                textBox.AppendText("変換元: " + Path.GetFileName(inputFilePath) + Environment.NewLine);
+                textBox.AppendText("変換: " + Path.GetFileName(inputFilePath) + Environment.NewLine);
                 //非同期処理
                 //参考ページ:https://qiita.com/gonavi/items/2980b0791a4c14906cd1
                 //プログレスバーの更新
                 timer1.Enabled = true;
                 //変換
-                await Task.Run(() => ConvertFile(inputFilePath, outputFilePath));
-                //テキストボックスに何か表示（出力ファイル名）
-                textBox.AppendText("変換後: " + Path.GetFileName(outputFilePath) + Environment.NewLine);
+                int result = await Task.Run(() => ConvertFile(inputFilePath, outputFilePath));
                 timer1.Enabled = false;
+                //テキストボックスに何か表示（出力ファイル名）
+                if (result == -1)
+                {
+                    textBox.AppendText("失敗: " + Path.GetFileName(inputFilePath) + Environment.NewLine);
+                    continue;
+                }
+                textBox.AppendText("成功: " + Path.GetFileName(outputFilePath) + Environment.NewLine);
+                
                 //最後に一回
                 UpdateProgressBar();
             }
-            toolStripStatusLabel1.Text = "すべての変換が完了しました";
+            toolStripStatusLabel1.Text = "すべての処理が完了しました";
             openButton.Enabled = true;
             isEncoding = false;
         }
 
-        private void ConvertFile(string inputFilePath, string outputFilePath)
+        private int ConvertFile(string inputFilePath, string outputFilePath)
         {
+            isError = false;
+
             //参考ページ:https://dobon.net/vb/dotnet/process/standardoutput.html
             //Processオブジェクトを作成
             Process p = new Process();
@@ -136,6 +145,8 @@ namespace vfr2cfr
             p.CancelErrorRead();
             p.Close();
 
+            if (isError) return -1;
+
             //ffmpegでエンコード
             p.StartInfo.Arguments = @"/c ffmpeg -i " + "\"" + inputFilePath + "\"" + " -progress - -r " + fpsArray[selectedFps].ToString() + " -vsync cfr -af aresample=async=1 -vcodec utvideo -acodec pcm_s16le -colorspace bt709 -pix_fmt yuv422p " + "\"" + outputFilePath + "\"";
             p.Start();
@@ -147,6 +158,8 @@ namespace vfr2cfr
             p.CancelOutputRead();
             p.CancelErrorRead();
             p.Close();
+
+            return 0;
         }
 
         static void p_OutputDataReceived(object sender, DataReceivedEventArgs e)
@@ -181,8 +194,17 @@ namespace vfr2cfr
 
         static void p_ErrorDataReceived(object sender,DataReceivedEventArgs e)
         {
+            if (e.Data == null)
+            {
+                return;
+            }
             //エラー出力された文字列を表示する
             Console.WriteLine("ERR>{0}", e.Data);
+            if (e.Data.Contains("Invalid data found when processing input"))
+            {
+                isError = true;
+            }
+
         }
 
         private void UpdateProgressBar()
