@@ -119,8 +119,10 @@ namespace vfr2cfr
             //出力を読み取れるようにする
             p.StartInfo.UseShellExecute = false;
             p.StartInfo.RedirectStandardOutput = true;
+            p.StartInfo.RedirectStandardError = true;
             //OutputDataReceivedイベントハンドラを追加
             p.OutputDataReceived += p_OutputDataReceived;
+            p.ErrorDataReceived += p_ErrorDataReceived;
             //入力できるようにする
             p.StartInfo.RedirectStandardInput = false;
 
@@ -128,8 +130,10 @@ namespace vfr2cfr
             p.StartInfo.Arguments = @"/c ffprobe " + "\"" + inputFilePath + "\"" + " -hide_banner -show_entries format=duration";
             p.Start();
             p.BeginOutputReadLine();
+            p.BeginErrorReadLine();
             p.WaitForExit();
             p.CancelOutputRead();
+            p.CancelErrorRead();
             p.Close();
 
             //ffmpegでエンコード
@@ -138,14 +142,17 @@ namespace vfr2cfr
             //強制killするためにpidをもっとく
             ffmpegPid = p.Id;
             p.BeginOutputReadLine();
+            p.BeginErrorReadLine();
             p.WaitForExit();
             p.CancelOutputRead();
+            p.CancelErrorRead();
             p.Close();
         }
 
         static void p_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
-            if(e.Data == null)
+            Console.WriteLine(e.Data);
+            if (e.Data == null)
             {
                 return;
             }
@@ -170,6 +177,12 @@ namespace vfr2cfr
                 progressBarValue = 100;
                 return;
             }
+        }
+
+        static void p_ErrorDataReceived(object sender,DataReceivedEventArgs e)
+        {
+            //エラー出力された文字列を表示する
+            Console.WriteLine("ERR>{0}", e.Data);
         }
 
         private void UpdateProgressBar()
