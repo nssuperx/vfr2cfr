@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{DCD3872E-7433-4DCF-B230-DD8AF52E54B0}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>vfr2cfr</RootNamespace>
     <AssemblyName>vfr2cfr</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
