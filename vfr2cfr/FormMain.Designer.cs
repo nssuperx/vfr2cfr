@@ -41,17 +41,15 @@ namespace vfr2cfr
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
-            this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.fpsButton = new System.Windows.Forms.Button();
             this.statusStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
-            this.tableLayoutPanel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // openButton
             // 
-            this.openButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.openButton.Location = new System.Drawing.Point(5, 3);
+            this.openButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.openButton.Location = new System.Drawing.Point(12, 280);
             this.openButton.Name = "openButton";
             this.openButton.Size = new System.Drawing.Size(75, 27);
             this.openButton.TabIndex = 0;
@@ -61,9 +59,9 @@ namespace vfr2cfr
             // 
             // outButton
             // 
-            this.outButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
+            this.outButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.outButton.Enabled = false;
-            this.outButton.Location = new System.Drawing.Point(178, 3);
+            this.outButton.Location = new System.Drawing.Point(197, 280);
             this.outButton.Name = "outButton";
             this.outButton.Size = new System.Drawing.Size(75, 27);
             this.outButton.TabIndex = 1;
@@ -155,28 +153,10 @@ namespace vfr2cfr
             this.tableLayoutPanel1.Size = new System.Drawing.Size(260, 258);
             this.tableLayoutPanel1.TabIndex = 6;
             // 
-            // tableLayoutPanel2
-            // 
-            this.tableLayoutPanel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.tableLayoutPanel2.ColumnCount = 3;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel2.Controls.Add(this.outButton, 2, 0);
-            this.tableLayoutPanel2.Controls.Add(this.fpsButton, 1, 0);
-            this.tableLayoutPanel2.Controls.Add(this.openButton, 0, 0);
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(12, 276);
-            this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 1;
-            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(260, 33);
-            this.tableLayoutPanel2.TabIndex = 7;
-            // 
             // fpsButton
             // 
-            this.fpsButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)));
-            this.fpsButton.Location = new System.Drawing.Point(91, 3);
+            this.fpsButton.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.fpsButton.Location = new System.Drawing.Point(105, 280);
             this.fpsButton.Name = "fpsButton";
             this.fpsButton.Size = new System.Drawing.Size(75, 27);
             this.fpsButton.TabIndex = 2;
@@ -189,7 +169,9 @@ namespace vfr2cfr
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 361);
-            this.Controls.Add(this.tableLayoutPanel2);
+            this.Controls.Add(this.openButton);
+            this.Controls.Add(this.fpsButton);
+            this.Controls.Add(this.outButton);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.statusStrip1);
@@ -202,7 +184,6 @@ namespace vfr2cfr
             this.statusStrip1.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
-            this.tableLayoutPanel2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -220,7 +201,6 @@ namespace vfr2cfr
         private Timer timer1;
         private ToolStripStatusLabel toolStripStatusLabel1;
         private TableLayoutPanel tableLayoutPanel1;
-        private TableLayoutPanel tableLayoutPanel2;
         private Button fpsButton;
     }
 }
