@@ -36,13 +36,13 @@ namespace vfr2cfr
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.openFilesList = new System.Windows.Forms.ListBox();
             this.textBox = new System.Windows.Forms.TextBox();
-            this.statusStrip1 = new System.Windows.Forms.StatusStrip();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.progressBar1 = new System.Windows.Forms.ProgressBar();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
+            this.progressBar = new System.Windows.Forms.ProgressBar();
+            this.timer = new System.Windows.Forms.Timer(this.components);
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.fpsButton = new System.Windows.Forms.Button();
-            this.statusStrip1.SuspendLayout();
+            this.statusStrip.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -104,37 +104,37 @@ namespace vfr2cfr
             this.textBox.TabIndex = 3;
             this.textBox.WordWrap = false;
             // 
-            // statusStrip1
+            // statusStrip
             // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 339);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(284, 22);
-            this.statusStrip1.TabIndex = 4;
-            this.statusStrip1.Text = "statusStrip1";
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel});
+            this.statusStrip.Location = new System.Drawing.Point(0, 339);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(284, 22);
+            this.statusStrip.TabIndex = 4;
+            this.statusStrip.Text = "statusStrip1";
             // 
-            // toolStripStatusLabel1
+            // toolStripStatusLabel
             // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(269, 17);
-            this.toolStripStatusLabel1.Spring = true;
-            this.toolStripStatusLabel1.Text = "  ";
-            this.toolStripStatusLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(269, 17);
+            this.toolStripStatusLabel.Spring = true;
+            this.toolStripStatusLabel.Text = "  ";
+            this.toolStripStatusLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // progressBar1
+            // progressBar
             // 
-            this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.progressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar1.Location = new System.Drawing.Point(12, 313);
-            this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(260, 23);
-            this.progressBar1.TabIndex = 5;
+            this.progressBar.Location = new System.Drawing.Point(12, 313);
+            this.progressBar.Name = "progressBar";
+            this.progressBar.Size = new System.Drawing.Size(260, 23);
+            this.progressBar.TabIndex = 5;
             // 
-            // timer1
+            // timer
             // 
-            this.timer1.Interval = 200;
-            this.timer1.Tick += new System.EventHandler(this.Timer1_Tick);
+            this.timer.Interval = 200;
+            this.timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
             // tableLayoutPanel1
             // 
@@ -173,15 +173,15 @@ namespace vfr2cfr
             this.Controls.Add(this.fpsButton);
             this.Controls.Add(this.outButton);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Controls.Add(this.progressBar1);
-            this.Controls.Add(this.statusStrip1);
+            this.Controls.Add(this.progressBar);
+            this.Controls.Add(this.statusStrip);
             this.MinimumSize = new System.Drawing.Size(300, 400);
             this.Name = "FormMain";
             this.Text = "vfr2cfr";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
             this.Load += new System.EventHandler(this.FormMain_Load);
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
@@ -196,10 +196,10 @@ namespace vfr2cfr
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.ListBox openFilesList;
         private System.Windows.Forms.TextBox textBox;
-        private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ProgressBar progressBar1;
-        private Timer timer1;
-        private ToolStripStatusLabel toolStripStatusLabel1;
+        private System.Windows.Forms.StatusStrip statusStrip;
+        private System.Windows.Forms.ProgressBar progressBar;
+        private Timer timer;
+        private ToolStripStatusLabel toolStripStatusLabel;
         private TableLayoutPanel tableLayoutPanel1;
         private Button fpsButton;
     }

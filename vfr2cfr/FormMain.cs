@@ -31,7 +31,7 @@ namespace vfr2cfr
 
         private void OpenButton_Click(object sender, EventArgs e)
         {
-            progressBar1.Value = 0;
+            progressBar.Value = 0;
             videoDuration = 0.0;
             videoOuttime = 0.0;
             DialogResult dr = openFileDialog.ShowDialog();
@@ -55,7 +55,6 @@ namespace vfr2cfr
             outButton.Enabled = false;
             openButton.Enabled = false;
             OutButtonClickMethod();
-            
         }
 
         private void FpsButton_Click(object sender, EventArgs e)
@@ -75,9 +74,11 @@ namespace vfr2cfr
                 videoDuration = 0.0;
                 videoOuttime = 0.0;
                 progressBarValue = 0;
-                //StatusStripに文字列を出す。
+
+                //StatusStripに文字列を出す
                 encodeingVideoNum++;
-                toolStripStatusLabel1.Text = "(" + encodeingVideoNum.ToString() + " / " + inputFilePaths.Length.ToString() + ")" + "変換中["+ fpsArray[selectedFps].ToString() + "fps]:" + Path.GetFileName(inputFilePaths[encodeingVideoNum - 1]);
+                toolStripStatusLabel.Text = "(" + encodeingVideoNum.ToString() + " / " + inputFilePaths.Length.ToString() + ")" + "変換中["+ fpsArray[selectedFps].ToString() + "fps]:" + Path.GetFileName(inputFilePaths[encodeingVideoNum - 1]);
+                
                 //出力ファイル名かぶらないように頑張る
                 string f = inputFilePath;
                 f = Path.ChangeExtension(f, "avi");
@@ -91,13 +92,12 @@ namespace vfr2cfr
 
                 //テキストボックスに何か表示（入力ファイル名）
                 textBox.AppendText("変換: " + Path.GetFileName(inputFilePath) + Environment.NewLine);
-                //非同期処理
-                //参考ページ:https://qiita.com/gonavi/items/2980b0791a4c14906cd1
+                
                 //プログレスバーの更新
-                timer1.Enabled = true;
+                timer.Enabled = true;
                 //変換
                 int result = await Task.Run(() => ConvertFile(inputFilePath, outputFilePath));
-                timer1.Enabled = false;
+                timer.Enabled = false;
                 //テキストボックスに何か表示（出力ファイル名）
                 if (result == -1)
                 {
@@ -106,10 +106,10 @@ namespace vfr2cfr
                 }
                 textBox.AppendText("成功: " + Path.GetFileName(outputFilePath) + Environment.NewLine);
                 
-                //最後に一回
+                //最後に一回　終わったときは100%に見せる
                 UpdateProgressBar();
             }
-            toolStripStatusLabel1.Text = "すべての処理が完了しました";
+            toolStripStatusLabel.Text = "すべての処理が完了しました";
             openButton.Enabled = true;
             isEncoding = false;
         }
@@ -118,89 +118,89 @@ namespace vfr2cfr
         {
             isError = false;
 
-            //参考ページ:https://dobon.net/vb/dotnet/process/standardoutput.html
             //Processオブジェクトを作成
-            Process p = new Process();
-            //ComSpec(cmd.exe)のパスを取得して、FileNameプロパティに指定
-            p.StartInfo.FileName = Environment.GetEnvironmentVariable("ComSpec");
-            p.StartInfo.CreateNoWindow = true;
+            Process ffmpegProcess = new Process();
+            //cmd.exeのパス取得
+            ffmpegProcess.StartInfo.FileName = Environment.GetEnvironmentVariable("ComSpec");
+            ffmpegProcess.StartInfo.CreateNoWindow = true;
 
             //出力を読み取れるようにする
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.RedirectStandardOutput = true;
-            p.StartInfo.RedirectStandardError = true;
-            //OutputDataReceivedイベントハンドラを追加
-            p.OutputDataReceived += p_OutputDataReceived;
-            p.ErrorDataReceived += p_ErrorDataReceived;
-            //入力できるようにする
-            p.StartInfo.RedirectStandardInput = false;
+            ffmpegProcess.StartInfo.UseShellExecute = false;
+            ffmpegProcess.StartInfo.RedirectStandardOutput = true;
+            ffmpegProcess.StartInfo.RedirectStandardInput = false;
+            ffmpegProcess.StartInfo.RedirectStandardError = true;
+
+            ffmpegProcess.OutputDataReceived += processOutputDataReceived;
+            ffmpegProcess.ErrorDataReceived += processErrorDataReceived;
 
             //ffprobeで情報取得
-            p.StartInfo.Arguments = @"/c ffprobe " + "\"" + inputFilePath + "\"" + " -hide_banner -show_entries format=duration";
-            p.Start();
-            p.BeginOutputReadLine();
-            p.BeginErrorReadLine();
-            p.WaitForExit();
-            p.CancelOutputRead();
-            p.CancelErrorRead();
-            p.Close();
+            ffmpegProcess.StartInfo.Arguments = @"/c ffprobe " + "\"" + inputFilePath + "\"" + " -hide_banner -show_entries format=duration";
+            ffmpegProcess.Start();
+            ffmpegProcess.BeginOutputReadLine();
+            ffmpegProcess.BeginErrorReadLine();
+            ffmpegProcess.WaitForExit();
+            ffmpegProcess.CancelOutputRead();
+            ffmpegProcess.CancelErrorRead();
+            ffmpegProcess.Close();
 
             if (isError) return -1;
 
             //ffmpegでエンコード
-            p.StartInfo.Arguments = @"/c ffmpeg -i " + "\"" + inputFilePath + "\"" + " -progress - -r " + fpsArray[selectedFps].ToString() + " -vsync cfr -af aresample=async=1 -vcodec utvideo -acodec pcm_s16le -colorspace bt709 -pix_fmt yuv422p " + "\"" + outputFilePath + "\"";
-            p.Start();
+            ffmpegProcess.StartInfo.Arguments = @"/c ffmpeg -i " + "\"" + inputFilePath + "\"" + " -progress - -r " + fpsArray[selectedFps].ToString() + " -vsync cfr -af aresample=async=1 -vcodec utvideo -acodec pcm_s16le -colorspace bt709 -pix_fmt yuv422p " + "\"" + outputFilePath + "\"";
+            ffmpegProcess.Start();
             //強制killするためにpidをもっとく
-            ffmpegPid = p.Id;
-            p.BeginOutputReadLine();
-            p.BeginErrorReadLine();
-            p.WaitForExit();
-            p.CancelOutputRead();
-            p.CancelErrorRead();
-            p.Close();
+            ffmpegPid = ffmpegProcess.Id;
+            ffmpegProcess.BeginOutputReadLine();
+            ffmpegProcess.BeginErrorReadLine();
+            ffmpegProcess.WaitForExit();
+            ffmpegProcess.CancelOutputRead();
+            ffmpegProcess.CancelErrorRead();
+            ffmpegProcess.Close();
 
             return 0;
         }
 
-        static void p_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        static void processOutputDataReceived(object sender, DataReceivedEventArgs eventArgs)
         {
-            Console.WriteLine(e.Data);
-            if (e.Data == null)
+            Console.WriteLine(eventArgs.Data);
+            if (eventArgs.Data == null)
             {
                 return;
             }
-            //Console.WriteLine(e.Data);
+            //Console.WriteLine(eventArgs.Data);
 
-            if (e.Data.Contains("duration="))
+            if (eventArgs.Data.Contains("duration="))
             {
-                videoDuration = double.Parse(e.Data.Replace("duration=", "")) * Math.Pow(10, 6);
+                videoDuration = double.Parse(eventArgs.Data.Replace("duration=", "")) * Math.Pow(10, 6);
                 //Console.WriteLine(videoDuration);
                 return;
             }
 
-            if (e.Data.Contains("out_time_us="))
+            if (eventArgs.Data.Contains("out_time_us="))
             {
-                videoOuttime = double.Parse(e.Data.Replace("out_time_us=", ""));
+                videoOuttime = double.Parse(eventArgs.Data.Replace("out_time_us=", ""));
                 //Console.WriteLine(videoOuttime);
                 progressBarValue = (int)Math.Min(Math.Max(0, (videoOuttime / videoDuration * 100)), 100);
             }
-            if (e.Data.Contains("progress=end"))
+            if (eventArgs.Data.Contains("progress=end"))
             {
-                //Console.WriteLine(e.Data);
+                //Console.WriteLine(eventArgs.Data);
                 progressBarValue = 100;
                 return;
             }
         }
 
-        static void p_ErrorDataReceived(object sender,DataReceivedEventArgs e)
+        static void processErrorDataReceived(object sender,DataReceivedEventArgs eventArgs)
         {
-            if (e.Data == null)
+            if (eventArgs.Data == null)
             {
                 return;
             }
             //エラー出力された文字列を表示する
-            Console.WriteLine("ERR>{0}", e.Data);
-            if (e.Data.Contains("Invalid data found when processing input"))
+            //Console.WriteLine("ERR>{0}", eventArgs.Data);
+
+            //これである程度は変換できないのをはじける
+            if (eventArgs.Data.Contains("Invalid data found when processing input"))
             {
                 isError = true;
             }
@@ -213,12 +213,12 @@ namespace vfr2cfr
             {
                 return;
             }
-            progressBar1.Value = progressBarValue;
-            //Console.WriteLine(progressBar1.Value);
+            progressBar.Value = progressBarValue;
+            //Console.WriteLine(progressBar.Value);
             return;
         }
         
-        private void Timer1_Tick(object sender, EventArgs e)
+        private void Timer_Tick(object sender, EventArgs e)
         {
             UpdateProgressBar();
             //Console.WriteLine("ffmpegPid=" + ffmpegPid.ToString());
@@ -228,7 +228,7 @@ namespace vfr2cfr
         {
             if (isEncoding)
             {
-                if (MessageBox.Show("変換の途中です!! 終了してもいいですか？", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
+                if (MessageBox.Show("変換の途中です！ 終了してもいいですか？", "確認", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.No)
                 {
                     e.Cancel = true;
                 }
@@ -242,16 +242,15 @@ namespace vfr2cfr
 
         private void KillProcessTree(Process process)
         {
-            //参考ページ:https://qiita.com/yohhoy/items/b6e32e17c9d568f927d8
             string taskkill = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "taskkill.exe");
-            using (var procKiller = new Process())
+            using (var processKiller = new Process())
             {
-                procKiller.StartInfo.FileName = taskkill;
-                procKiller.StartInfo.Arguments = string.Format("/PID {0} /T /F", process.Id);
-                procKiller.StartInfo.CreateNoWindow = true;
-                procKiller.StartInfo.UseShellExecute = false;
-                procKiller.Start();
-                procKiller.WaitForExit();
+                processKiller.StartInfo.FileName = taskkill;
+                processKiller.StartInfo.Arguments = string.Format("/PID {0} /T /F", process.Id);
+                processKiller.StartInfo.CreateNoWindow = true;
+                processKiller.StartInfo.UseShellExecute = false;
+                processKiller.Start();
+                processKiller.WaitForExit();
             }
         }
     }
