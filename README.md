@@ -1,37 +1,35 @@
 # vfr2cfr
-���ȒP��vfr�����cfr����ɕϊ�����B
+超簡単にvfr動画をcfr動画に変換する。
 
-## �O��
+## 前提
 * ffmpeg
-* Ut Video Codec Suite
 
-## �g����
-### ����
-* **ffmpeg**���g�����Ԃɂ���B�i�p�X��ʂ��Ȃǁj
-* **Ut Video Codec Suite**���C���X�g�[������B
+## 使い方
+### 準備
+* **ffmpeg**を使える状態にする。（パスを通すなど）
 
 ## vfr2cfr.exe
-1. �u�J���v�œ����I������B
-1. �^�񒆂̃{�^���Ńt���[�����[�g��I������B(30fps �܂��� 60fps)
-1. �u�ϊ��v�ŕϊ�����B
+1. 「開く」で動画を選択する。
+1. 真ん中のボタンでフレームレートを選択する。(30fps または 60fps)
+1. 「変換」で変換する。
 
-�o�͂���铮��̃t�@�C�����́A`"���̓t�@�C����" + ".avi"` �ŏo�͂���܂��B  
-�����t�@�C�����̂��̂����łɑ��݂���ꍇ�́A`"���̓t�@�C����" + "-out" + ".avi"` �ŏo�͂���܂��B
-### vfr2cfr.exe �̒��ӓ_
-* ����t�@�C���ȊO�̂��̂���͂������́A�����͒e���܂����A���̂Ƃ��̋����͕ۏ؂��܂���B
+出力する動画のファイル名は、`"入力ファイル名" + ".avi"` で出力する。  
+同じファイル名のものがすでに存在する場合は、`"入力ファイル名" + "-out" + ".avi"` で出力する。
+### vfr2cfr.exe の注意点
+* 動画ファイル以外のものを入力した時は、多少は弾くが、そのときの挙動は保証しない。
 
 ## vfr2cfr.bat
-1. �h���b�O�A���h�h���b�v����B�����I���B
-### vfr2cfr.bat �̒��ӓ_
-* �t���[�����[�g�̓o�b�`�t�@�C���� `-r` �̌��̐�����ς��Ă��������B
-* ����t�@�C���ȊO�̂��̂���͂������̋����͕ۏ؂��܂���B�i��O�����Ȃ��j
+1. ドラッグアンドドロップする。複数選択可。
+### vfr2cfr.bat の注意点
+* フレームレートはバッチファイルの `-r` の後ろの数字を変える。
+* 動画ファイル以外のものを入力した時の挙動は保証しない。（例外処理なし）
 
 ***
 
-### �r�f�I�I�v�V����
-* �R�[�f�b�N�F`utvideo`
-* �F��ԁF`BT.709`
-* �s�N�Z���t�H�[�}�b�g�F`YUV422`
+### ビデオオプション
+* コーデック：`utvideo` （ffmpeg実装）
+* 色空間：`BT.709`
+* ピクセルフォーマット：`YUV422`
 
-### �I�[�f�B�I�I�v�V����
-* �R�[�f�b�N�F`PCM signed 16-bit little-endian`
+### オーディオオプション
+* コーデック：`PCM signed 16-bit little-endian`
