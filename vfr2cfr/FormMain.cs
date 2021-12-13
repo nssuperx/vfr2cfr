@@ -3,11 +3,26 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace vfr2cfr
 {
     public partial class FormMain : Form
     {
+        // 32bit
+        [DllImport("vfr2cfrLib.dll", EntryPoint = "TestString")]
+        static extern int Test_32();
+
+        // 64bit    
+        [DllImport("vfr2cfrLib64.dll", EntryPoint = "TestString")]
+        static extern int Test_64();
+
+        static int Test()
+        {
+            return Environment.Is64BitProcess ? Test_32() : Test_64();
+        }
+
+
         private string[] inputFilePaths;
         private static double videoDuration = 0.0;
         private static double videoOuttime = 0.0;
@@ -21,6 +36,9 @@ namespace vfr2cfr
         public FormMain()
         {
             InitializeComponent();
+
+            // test
+            textBox1.AppendText(Test().ToString());
         }
 
         private void FormMain_Load(object sender, EventArgs e)
